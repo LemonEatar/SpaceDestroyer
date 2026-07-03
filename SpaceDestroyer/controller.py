@@ -8,6 +8,22 @@ class CONTROLLER(EREIGNISBEHANDLUNG):
         super().__init__()
         self.v = VIEW()
         self.m = MODEL()
+        self.enemy1 = self.m.ENEMY()
+        self.bullets = []
+        super().TaktdauerSetzen(4)
+
+    #def TaktdauerSetzen(self, ms):
+       #return super().TaktdauerSetzen(ms)
+
+    def AktionAusfuehren(self):
+       self.enemy1.MoveEnemy()
+       self.v.ship.GanzNachHintenBringen()
+       for bullet in self.bullets:
+        bullet.MoveBullet()
+        print('Space pressed')
+
+
+    
     def TasteGedrueckt(self, taste):
         if taste == 'a':
           self.v.ship.Verschieben(-10, 0)
@@ -16,13 +32,7 @@ class CONTROLLER(EREIGNISBEHANDLUNG):
           self.v.ship.Verschieben(10, 0)
           self.v.hitBoxPlayer.PositionSetzen(self.v.ship.x, self.v.ship.y + 25)
         if keyboard.is_pressed(' '):
-          self.v.ship.GanzNachHintenBringen()
-          bullet = self.v.BULLET(self.v.ship.x, self.v.ship.y)
-          bullet.TaktdauerSetzen(4)
-          print('Space pressed')
-    def Enemy(self):
-        enemy = self.v.ENEMY()
-        enemy.TaktdauerSetzen(4)
+          self.bullets.append(self.m.BULLET(self.v.ship.x, self.v.ship.y))
+
 
 c = CONTROLLER()
-c.Enemy()
