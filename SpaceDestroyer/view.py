@@ -11,7 +11,7 @@ class VIEW(EREIGNISBEHANDLUNG):
         self.ship.GroesseSetzen(50, 100)
         self.hitBoxPlayer = FIGUR(self.ship.x, self.ship.y + 25, 90)
     
-    def movePlayer(self, taste):
+    #def movePlayer(self, taste):
        
     class BULLET(EREIGNISBEHANDLUNG):
 
@@ -28,12 +28,17 @@ class VIEW(EREIGNISBEHANDLUNG):
         def TaktdauerSetzen(self, ms):
             return super().TaktdauerSetzen(ms)
         
-    class ENEMY(FIGUR):
+    class ENEMY(EREIGNISBEHANDLUNG):
         
         def __init__(self):
             super().__init__()
-            self.FigurteilFestlegenEllipse(500, 50, 80, 80, "grün")
+            self.enemy = FIGUR()
+            self.enemy.FigurteilFestlegenEllipse(500, 50, 80, 80, "grün")
 
         def AktionAusfuehren(self):
-            self.Drehen(random.randint(0,360))
-            self.Gehen(random.randint(1,30))
+            #self.enemy.Drehen(random.randint(0,360))
+            self.enemy.PositionSetzen(self.enemy.x + 1, self.enemy.y + random.randint(-1, 1))
+            if self.enemy.x >= 800:
+                self.enemy.PositionSetzen(-200, 50)
+        def TaktdauerSetzen(self, ms):
+            return super().TaktdauerSetzen(ms)
