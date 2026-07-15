@@ -21,40 +21,54 @@ class MODEL(EREIGNISBEHANDLUNG):
 
     
 
-    class BOSSBULLET():
-        def __init__(self, x, y):
-            self.bossbullet = DREIECK()
-            self.bossbullet.PositionSetzen(x,y)
-            self.bossbullet.GroesseSetzen(5,15)
-            self.bossbullet.FarbeSetzen("blau")
-            self.bossbullet.Drehen(180)
-        
-        def MoveBossBullet(self):
-            self.bossbullet.PositionSetzen(self.bossbullet.x, self.bossbullet.y+1.5)
-        def __del__(self) :
-            # deconstruct
-            print("Bullet destroyed")
+    class BOSS():
+        def __init__(self):
+            self.enemy = FIGUR()
+            self.bossLives = 100
+            self.enemy.FigurteilFestlegenEllipse(500, 50, 50, 50, "blau")
+        def PositionSetzen(self, x, y):
+            self.enemy.PositionSetzen(x, y)
+        def MoveBoss(self):
+            self.enemy.PositionSetzen(self.enemy.x + 0.75, self.enemy.y + random.randint(-1, 1))
+            if self.enemy.x >= 1200:
+                self.enemy.PositionSetzen(-200, 50)
+        def isHit(self):
+            if self.enemy.BeruehrtFarbe("schwarz"):
+                self.bossLives -= 1
+                if self.bossLives <= 0:
+                    return True
+        def createBossBullet(self):
+            return self.BBULLET(self.enemy.x +230, self.enemy.y+10)
+        class BBULLET():
+            def __init__(self, x, y):
+                self.bbullet = DREIECK()
+                self.bbullet.PositionSetzen(x,y)
+                self.bbullet.GroesseSetzen(5,15)
+                self.bbullet.FarbeSetzen("grau")
+                self.bbullet.Drehen(180)
+            
+            def MoveBossBullet(self):
+                self.bbullet.PositionSetzen(self.bbullet.x, self.bbullet.y+2)
+            def __del__(self) :
+                # deconstruct
+                print("Bullet destroyed")
 
     class ENEMY():
         def __init__(self):
             self.enemy = FIGUR()
             self.enemy.FigurteilFestlegenEllipse(500, 50, 80, 80, "grün")
             self.zustand = 1
-        def FarbeSetzen(self, farbe):
-            self.FarbeSetzen(farbe)
         def PositionSetzen(self, x, y):
-            self.PositionSetzen(x, y)
+            self.enemy.PositionSetzen(x, y)
         def MoveEnemy(self):
             self.enemy.PositionSetzen(self.enemy.x + 0.5, self.enemy.y + random.randint(-1, 1))
-            if self.enemy.x >= 800:
+            if self.enemy.x >= 1200:
                 self.enemy.PositionSetzen(-200, 50)
         def isHit(self):
             if self.enemy.BeruehrtFarbe("schwarz"):
+                self.enemy.PositionSetzen(-30,3000)
                 print("Hit")
-                self.enemy.PositionSetzen(-300, -100)
-            if self.enemy.x == -300:
-                print("Enemy destroyed")
-                self.zustand = 0
+                return True
         def createEBullet(self):
             return self.EBULLET(self.enemy.x +230, self.enemy.y+10)
         class EBULLET():
