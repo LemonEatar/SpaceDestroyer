@@ -1,17 +1,22 @@
 from graphics_and_games_klassen import *
 import random 
+import time
 
 class VIEW(EREIGNISBEHANDLUNG):
 
     def __init__(self):
         super().__init__()
-        self.gameoverbg = RECHTECK()
-        self.gameoverbg.PositionSetzen(-100, -100)
-        self.gameoverbg.FarbeSetzen("schwarz")
-        self.gameoverbg.GroesseSetzen(2000, 2000)
-        self.gameoverbg.SichtbarkeitSetzen(False)
+        self.bg = RECHTECK()
+        self.bg.FarbeSetzen("schwarz")
+        self.bg.PositionSetzen(-50,-50)
+        self.bg.GroesseSetzen(0, 0)
+        self.score = 0
+        self.killcount = TEXT()
+        self.killcount.PositionSetzen(10, 40)
+        self.killcount.TextGroesseSetzen(20)
+        self.killcount.TextSetzen(self.score)
         self.gameoverstate = TEXT()
-        self.gameoverstate.TextGroesseSetzen(100)
+        self.gameoverstate.FarbeSetzen("rot")
         self.gameoverstate.SichtbarkeitSetzen(False)
         #Raumschiff
         self.ship = DREIECK()
@@ -19,6 +24,7 @@ class VIEW(EREIGNISBEHANDLUNG):
         self.ship.PositionSetzen(500, 500)
         self.ship.GroesseSetzen(50, 100)
         self.gameoverstate.TextSetzen(self.lives)
+        self.gameoverstate.TextGroesseSetzen(20)
     def movePlayer(self, left):
         if left == True:
             self.ship.Verschieben(-1, 0)
@@ -31,10 +37,12 @@ class VIEW(EREIGNISBEHANDLUNG):
            self.lives -= 1
            self.gameoverstate.TextSetzen(self.lives)
            if self.lives <= 0:
-               self.gameoverbg.SichtbarkeitSetzen(True)
+               self.bg = RECHTECK()
+               self.bg.FarbeSetzen("schwarz")
+               self.bg.PositionSetzen(-50,-50)
+               self.bg.GroesseSetzen(3000, 3000)
+               self.gameoverstate.GanzNachVornBringen()
                self.gameoverstate.SichtbarkeitSetzen(True)
-               self.gameoverstate.TextGroesseSetzen(250)
+               self.gameoverstate.TextGroesseSetzen(100)
                self.gameoverstate.TextSetzen("Game Over")
-               self.__del__
-           print(self.lives)
-
+               self.__del__()
