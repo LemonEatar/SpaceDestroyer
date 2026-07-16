@@ -4,8 +4,6 @@ class MODEL(EREIGNISBEHANDLUNG):
 
     def __init__(self):
         super().__init__()
-        self.score = 0
-
     class BULLET():
         def __init__(self, x, y):
             self.bullet = DREIECK()
@@ -24,8 +22,9 @@ class MODEL(EREIGNISBEHANDLUNG):
     class BOSS():
         def __init__(self):
             self.enemy = FIGUR()
-            self.bossLives = 100
-            self.enemy.FigurteilFestlegenEllipse(500, 50, 50, 50, "blau")
+            self.isAlive = True
+            self.bossLives = 50
+            self.enemy.FigurteilFestlegenEllipse(-10, 50, 50, 50, "blau")
         def PositionSetzen(self, x, y):
             self.enemy.PositionSetzen(x, y)
         def MoveBoss(self):
@@ -36,9 +35,10 @@ class MODEL(EREIGNISBEHANDLUNG):
             if self.enemy.BeruehrtFarbe("schwarz"):
                 self.bossLives -= 1
                 if self.bossLives <= 0:
+                    self.isAlive = False
                     return True
         def createBossBullet(self):
-            return self.BBULLET(self.enemy.x +230, self.enemy.y+10)
+            return self.BBULLET(self.enemy.x +15, self.enemy.y+10)
         class BBULLET():
             def __init__(self, x, y):
                 self.bbullet = DREIECK()
@@ -54,10 +54,12 @@ class MODEL(EREIGNISBEHANDLUNG):
                 print("Bullet destroyed")
 
     class ENEMY():
-        def __init__(self):
+        def __init__(self, x=500, y=50):
             self.enemy = FIGUR()
-            self.enemy.FigurteilFestlegenEllipse(500, 50, 80, 80, "grün")
+            self.enemy.FigurteilFestlegenEllipse(0, 0, 80, 80, "grün")
+            self.enemy.PositionSetzen(x, y)
             self.zustand = 1
+            self.lastBullet = None
         def PositionSetzen(self, x, y):
             self.enemy.PositionSetzen(x, y)
         def MoveEnemy(self):
@@ -70,7 +72,7 @@ class MODEL(EREIGNISBEHANDLUNG):
                 print("Hit")
                 return True
         def createEBullet(self):
-            return self.EBULLET(self.enemy.x +230, self.enemy.y+10)
+            return self.EBULLET(self.enemy.x+30, self.enemy.y+10)
         class EBULLET():
             def __init__(self, x, y):
                 self.ebullet = DREIECK()
